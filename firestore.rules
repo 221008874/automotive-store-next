@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // License pool: the Tauri app reads a license by its activation key AND links
+    // it to the current user/device (userId, deviceId, lastActivatedAt) anonymously.
+    // Pool docs are created/deleted only by the backend admin SDK (bypasses rules),
+    // so creation/deletion stay denied to clients.
+    match /licenses/{doc} {
+      allow read: if true;
+      allow update: if true;
+      allow create, delete: if false;
+    }
+
+    // Per-user license mirror created by activate() and read by check()/deactivate().
+    // No server-side enforcement here (single-tenant Spark app); scoped to the user's own doc.
+    match /userLicenses/{userId} {
+      allow read, write: if true;
+    }
+
+    // Everything else stays locked down: reads require Firebase Auth, and no
+    // client-side writes are permitted (business data is only written by the
+    // backend admin SDK, which bypasses these rules).
+    match /{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+storybook-static/
+
+# Tauri / Rust build target
+src-tauri/target/
+src-tauri/gen/schemas/
+
+# Heavy binary build resources (embedded server JAR + JRE + backups).
+# These are bundled outputs, not source; the installer MSI (hosted in GitHub Releases)
+# already contains the packaged resources.
+src-tauri/resources/
+installer/
+
+# Installed app installers (bundles live in GitHub Releases, not the repo)
+*.msi
+*.exe
+
+# Logs
+*.log
+logs/
+
+# Env / local config (never commit secrets)
+.env
+.env.*
+!.env.example
+
+# Firebase service account / credentials
+firebase-service-account.json
+**/firebase-service-account.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.suo
+
+# Temp scratch scripts used during development
+check_firestore.cjs
+check_firestore.js
+read_firestore.cjs
+read_firestore.js
+read_firestore.mjs
+test_admin.cjs
+create_license.cjs
